@@ -30,7 +30,7 @@ DeutscheTelekom::DeutscheTelekom(QObject* parent)
 
 QString DeutscheTelekom::name()
 {
-    return tr("Deutsche Telekom (Congstar, ...)");
+    return tr("Germany D1 (Deutsche Telekom)");
 }
 
 QString DeutscheTelekom::description()
@@ -41,6 +41,11 @@ QString DeutscheTelekom::description()
 DataUsage DeutscheTelekom::lastState()
 {
     return m_lastState;
+}
+
+void DeutscheTelekom::refresh()
+{
+
 }
 
 void DeutscheTelekom::onSuccess(QNetworkReply* reply)

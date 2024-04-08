@@ -30,17 +30,22 @@ FakeProvider::FakeProvider(QObject* parent)
 
 QString FakeProvider::name()
 {
-    return tr("Deutsche Telekom (Congstar, ...)");
+    return tr("Fake");
 }
 
 QString FakeProvider::description()
 {
-    return tr("Network of the Deutsche Telekom");
+    return tr("Fake for testing");
 }
 
 DataUsage FakeProvider::lastState()
 {
     return m_lastState;
+}
+
+void FakeProvider::refresh()
+{
+
 }
 
 } // namespace DataMeter

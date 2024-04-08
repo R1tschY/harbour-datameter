@@ -26,6 +26,7 @@ public:
     QString description() override;
 
     DataUsage lastState() override;
+    void refresh() override;
 
 private:
     CyclicHttpRequest* m_request;
