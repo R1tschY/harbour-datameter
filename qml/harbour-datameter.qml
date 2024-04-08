@@ -30,7 +30,7 @@ ApplicationWindow
     }
 
 
-    initialPage: Component { FirstPage { } }
+    initialPage: Component { MainPage { } }
     cover: Qt.resolvedUrl("cover/CoverPage.qml")
     allowedOrientations: defaultAllowedOrientations
 }

@@ -25,8 +25,7 @@ SOURCES += src/harbour-datameter.cpp \
 
 DISTFILES += qml/harbour-datameter.qml \
     qml/cover/CoverPage.qml \
-    qml/pages/FirstPage.qml \
-    qml/pages/SecondPage.qml \
+    qml/pages/MainPage.qml \
     rpm/harbour-datameter.changes.in \
     rpm/harbour-datameter.changes.run.in \
     rpm/harbour-datameter.spec \

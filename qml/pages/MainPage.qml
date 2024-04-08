@@ -4,26 +4,13 @@ import Sailfish.Silica 1.0
 Page {
     id: page
 
-    // The effective value will be restricted by ApplicationWindow.allowedOrientations
     allowedOrientations: Orientation.All
 
-    // To enable PullDownMenu, place our content in a SilicaFlickable
     SilicaFlickable {
         anchors.fill: parent
 
-        // PullDownMenu and PushUpMenu must be declared in SilicaFlickable, SilicaListView or SilicaGridView
-        PullDownMenu {
-            MenuItem {
-                text: qsTr("Show Page 2")
-                onClicked: pageStack.push(Qt.resolvedUrl("SecondPage.qml"))
-            }
-        }
-
-        // Tell SilicaFlickable the height of its content.
         contentHeight: column.height
 
-        // Place our content in a Column.  The PageHeader is always placed at the top
-        // of the page, followed by our content.
         Column {
             id: column
 
@@ -35,12 +22,12 @@ Page {
             }
 
             Label {
-                text: "Pass-Name: " + provider.passName
+                text: provider.passName
                 color: Theme.secondaryHighlightColor
                 font.pixelSize: Theme.fontSizeExtraSmall
             }
             Label {
-                text: "Error: " + provider.errorString
+                text: qsTr("Error: ") + provider.errorString
                 color: Theme.secondaryHighlightColor
             }
             Label {
@@ -52,7 +39,7 @@ Page {
                     interval: 1000 * 60
                     repeat: true
                     triggeredOnStart: true
-                    running: true
+                    running: page.status === PageStatus.Active
                     onTriggered: {
                         lastUpdateLabel.text = humanizeTimeDiff(provider.lastUpdate)
                     }
@@ -65,8 +52,9 @@ Page {
                     }
                 }
             }
+
             Label {
-                text: "Nächste Aktuallisierung: " + provider.nextUpdate
+                text: qsTr("Next update: ") + provider.nextUpdate
                 color: Theme.secondaryHighlightColor
             }
 
@@ -94,13 +82,13 @@ Page {
 
                     Label {
                         anchors.horizontalCenter: parent.horizontalCenter
-                        text: "Used: " + humanizeFileSize(provider.usedDataVolume)
+                        text: qsTr("Used: ") + humanizeFileSize(provider.usedDataVolume)
                         color: Theme.secondaryHighlightColor
                         font.pixelSize: Theme.fontSizeExtraLarge
                     }
                     Label {
                         anchors.horizontalCenter: parent.horizontalCenter
-                        text: "Total: " + humanizeFileSize(provider.dataVolume)
+                        text: qsTr("Total: ") + humanizeFileSize(provider.dataVolume)
                         color: Theme.secondaryHighlightColor
                         font.pixelSize: Theme.fontSizeExtraLarge
                     }
