@@ -17,6 +17,7 @@ class Provider : public QObject {
     Q_PROPERTY(ProviderModel* model READ model WRITE setModel NOTIFY modelChanged)
 
     Q_PROPERTY(QString passName READ passName NOTIFY update)
+    Q_PROPERTY(bool hasError READ hasError NOTIFY update)
     Q_PROPERTY(QString errorString READ errorString NOTIFY update)
     Q_PROPERTY(qreal dataVolume READ dataVolume NOTIFY update)
     Q_PROPERTY(qreal usedDataVolume READ usedDataVolume NOTIFY update)
@@ -30,6 +31,7 @@ public:
     ProviderModel* model() const { return m_model; }
     void setModel(ProviderModel* model);
 
+    bool hasError() const;
     QString passName() const;
     QString errorString() const;
 

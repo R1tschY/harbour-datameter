@@ -33,6 +33,11 @@ QString Provider::passName() const
     return m_model ? m_model->lastState().passName : QString();
 }
 
+bool Provider::hasError() const
+{
+    return !m_model || !m_model->lastState().error.isEmpty();
+}
+
 QString Provider::errorString() const
 {
     return m_model ? m_model->lastState().error : QString();
