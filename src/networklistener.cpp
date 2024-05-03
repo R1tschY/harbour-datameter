@@ -31,8 +31,6 @@ static QList<QNetworkConfiguration::BearerType> MOBILE_DATA_FAMILY {
 
 NetworkListener::NetworkListener(QObject *parent) : QObject(parent)
 {
-    // Detect when a network interface changes status, so we announce ourselves
-    // in the new network
     connect(
         &m_networkManager, &QNetworkConfigurationManager::configurationChanged,
         this, &NetworkListener::onNetworkConfigurationChanged);

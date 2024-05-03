@@ -6,6 +6,25 @@ Page {
 
     allowedOrientations: Orientation.All
 
+    function updateDisplay() {
+        lastUpdateLabel.text = qsTr("Last update: %1").arg(humanizeTimeDiff(provider.lastUpdate))
+    }
+
+    onStatusChanged: page.updateDisplay()
+
+    Timer {
+        interval: 1000 * 60
+        repeat: true
+        triggeredOnStart: true
+        running: page.status === PageStatus.Active
+        onTriggered: page.updateDisplay()
+    }
+
+    Connections {
+        target: provider
+        onDataChanged: page.updateDisplay()
+    }
+
     SilicaFlickable {
         anchors.fill: parent
 
@@ -15,86 +34,54 @@ Page {
             id: column
 
             width: page.width
-            x: Theme.horizontalPageMargin
-            spacing: Theme.paddingLarge
+
             PageHeader {
                 title: qsTr("Data Meter")
             }
 
-            Label {
-                text: provider.passName
-                color: Theme.secondaryHighlightColor
-                font.pixelSize: Theme.fontSizeExtraSmall
+            ViewPlaceholder {
+                visible: !!provider.errorString
+                text: qsTr("Error: %1").arg(provider.errorString)
             }
-            Label {
-                text: qsTr("Error: ") + provider.errorString
-                color: Theme.secondaryHighlightColor
-            }
-            Label {
-                id: lastUpdateLabel
-                text: "-"
-                color: Theme.secondaryHighlightColor
 
-                Timer {
-                    interval: 1000 * 60
-                    repeat: true
-                    triggeredOnStart: true
-                    running: page.status === PageStatus.Active
-                    onTriggered: {
-                        lastUpdateLabel.text = humanizeTimeDiff(provider.lastUpdate)
-                    }
+            ViewPlaceholder {
+                visible: !networkListener.hasMobileData
+                text: qsTr("No mobile data active")
+            }
+
+            Column {
+                width: page.width
+                spacing: Theme.paddingLarge
+
+                Label {
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    text: provider.passName
+                    font.pixelSize: Theme.fontSizeLarge
                 }
 
-                Connections {
-                    target: provider
-                    onUpdate: {
-                        lastUpdateLabel.text = humanizeTimeDiff(provider.lastUpdate)
-                    }
+                Label {
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    text: qsTr("%1 of %2").arg(humanizeFileSize(provider.dataVolume - provider.usedDataVolume)).arg(humanizeFileSize(provider.dataVolume))
+                    font.pixelSize: Theme.fontSizeExtraLarge
+                }
+
+                Label {
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    text: qsTr("remaining for %1").arg(humanizeUntilDate(provider.until))
+                }
+
+                Label {
+                    text: " "
+                    height: Theme.paddingLarge
+                }
+
+                Label {
+                    id: lastUpdateLabel
+
+                    x: Theme.horizontalPageMargin
+                    color: Theme.secondaryColor
                 }
             }
-
-            Label {
-                text: qsTr("Next update: ") + provider.nextUpdate
-                color: Theme.secondaryHighlightColor
-            }
-
-            ProgressCircle {
-                id: progress
-
-                property real size: Math.min(page.width, page.height)
-                                    - 2 * Theme.horizontalPageMargin
-
-                inAlternateCycle: true
-
-                anchors.horizontalCenter: parent.horizontalCenter
-                width: size
-                height: size
-                visible: true
-
-                value: provider.usedDataVolume / provider.dataVolume
-                borderWidth: Theme.paddingMedium
-
-                Column {
-                    anchors {
-                        horizontalCenter: progress.horizontalCenter
-                        verticalCenter: progress.verticalCenter
-                    }
-
-                    Label {
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        text: qsTr("Used: ") + humanizeFileSize(provider.usedDataVolume)
-                        color: Theme.secondaryHighlightColor
-                        font.pixelSize: Theme.fontSizeExtraLarge
-                    }
-                    Label {
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        text: qsTr("Total: ") + humanizeFileSize(provider.dataVolume)
-                        color: Theme.secondaryHighlightColor
-                        font.pixelSize: Theme.fontSizeExtraLarge
-                    }
-                }
-            }
-
         }
     }
 }

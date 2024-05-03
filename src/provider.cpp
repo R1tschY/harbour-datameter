@@ -56,14 +56,21 @@ qreal Provider::usedDataVolume() const
 QDateTime Provider::lastUpdate() const
 {
     return m_model
-            ? QDateTime::fromMSecsSinceEpoch(m_model->lastState().lastUpdate)
+            ? m_model->lastState().lastUpdate
             : QDateTime();
 }
 
 QDateTime Provider::nextUpdate() const
 {
     return m_model
-            ? QDateTime::fromMSecsSinceEpoch(m_model->lastState().nextUpdate)
+            ? m_model->lastState().nextUpdate
+            : QDateTime();
+}
+
+QDateTime Provider::until() const
+{
+    return m_model
+            ? m_model->lastState().until
             : QDateTime();
 }
 
@@ -76,7 +83,7 @@ void Provider::refresh()
 
 void Provider::onUpdate()
 {
-    emit update();
+    emit dataChanged();
 }
 
 } // namespace DataMeter

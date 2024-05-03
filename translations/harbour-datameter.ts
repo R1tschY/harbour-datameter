@@ -4,10 +4,6 @@
 <context>
     <name>CoverPage</name>
     <message>
-        <source>of %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>N/A</source>
         <translation type="unfinished"></translation>
     </message>
@@ -18,10 +14,6 @@
 </context>
 <context>
     <name>DataMeter::DeutscheTelekom</name>
-    <message>
-        <source>Deutsche Telekom (Congstar, ...)</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message>
         <source>Network of the Deutsche Telekom</source>
         <translation type="unfinished"></translation>
@@ -42,37 +34,46 @@
         <source>Unexpected JSON format</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Germany D1 (Deutsche Telekom)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>DataMeter::FakeProvider</name>
     <message>
-        <source>Deutsche Telekom (Congstar, ...)</source>
+        <source>Fake</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Network of the Deutsche Telekom</source>
+        <source>Fake for testing</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
-    <name>FirstPage</name>
-    <message>
-        <source>Show Page 2</source>
-        <translation type="unfinished"></translation>
-    </message>
+    <name>MainPage</name>
     <message>
         <source>Data Meter</source>
         <translation type="unfinished"></translation>
     </message>
-</context>
-<context>
-    <name>SecondPage</name>
     <message>
-        <source>Nested Page</source>
+        <source>Last update: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Item</source>
+        <source>Error: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 of %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>remaining for %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No mobile data active</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -82,14 +83,36 @@
         <source>just now</source>
         <translation type="unfinished"></translation>
     </message>
-    <message numerus="yes">
+    <message>
         <source>%1 min ago</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 h %2 min ago</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>now</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>overdue</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message numerus="yes">
+        <source>%1 min</source>
         <translation type="unfinished">
             <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <source>in %1 min</source>
+        <source>%1 hours</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>%1 days</source>
         <translation type="unfinished">
             <numerusform></numerusform>
         </translation>

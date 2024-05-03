@@ -3,11 +3,14 @@
 
 #include "../provider.h"
 
+#include <QNetworkRequest>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QTimer>
+
 class QNetworkReply;
 
 namespace DataMeter {
-
-class CyclicHttpRequest;
 
 /**
  * @brief Provider for network of Deutsche Telekom (D1)
@@ -29,10 +32,14 @@ public:
     void refresh() override;
 
 private:
-    CyclicHttpRequest* m_request;
+    QNetworkRequest m_request;
+    QNetworkAccessManager m_nam;
+    QNetworkReply* m_reply = nullptr;
+    QTimer m_timer;
     DataUsage m_lastState;
 
-    void onSuccess(QNetworkReply* reply);
+    void doStart();
+    void onFinished();
     void sendUpdate(DataUsage dataUsage);
     void sendErrorUpdate(const QString& message);
 };

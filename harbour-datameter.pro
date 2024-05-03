@@ -16,7 +16,6 @@ CONFIG += sailfishapp
 QT += network
 
 SOURCES += src/harbour-datameter.cpp \
-    src/cyclichttprequest.cpp \
     src/networklistener.cpp \
     src/networkresponse.cpp \
     src/provider.cpp \
@@ -46,7 +45,6 @@ CONFIG += sailfishapp_i18n
 TRANSLATIONS += translations/harbour-datameter-de.ts
 
 HEADERS += \
-    src/cyclichttprequest.h \
     src/networklistener.h \
     src/networkresponse.h \
     src/provider.h \

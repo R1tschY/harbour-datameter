@@ -8,24 +8,22 @@
 #include <QNetworkRequest>
 #include <QRegularExpression>
 
-#include "../cyclichttprequest.h"
 #include "../networkresponse.h"
 
 namespace DataMeter {
 
 DeutscheTelekom::DeutscheTelekom(QObject* parent)
     : ProviderModel(parent)
-    , m_request(new CyclicHttpRequest(this))
 {
-    QNetworkRequest request(
+    m_request = QNetworkRequest(
         QUrl("https://pass.telekom.de/api/service/generic/v1/status"));
-    request.setRawHeader("Accept", "application/json");
-    request.setHeader(QNetworkRequest::UserAgentHeader, "Mozilla/4.0");
-    m_request->setRequest(request);
-    m_request->start();
-
-    connect(m_request, &CyclicHttpRequest::result,
-        this, &DeutscheTelekom::onSuccess);
+    m_request.setRawHeader("Accept", "application/json");
+    m_request.setHeader(QNetworkRequest::UserAgentHeader, "Mozilla/4.0");
+    connect(&m_timer, &QTimer::timeout,
+        this, &DeutscheTelekom::doStart);
+    m_timer.start(60000);
+    m_timer.setSingleShot(true);
+    doStart();
 }
 
 QString DeutscheTelekom::name()
@@ -48,14 +46,29 @@ void DeutscheTelekom::refresh()
 
 }
 
-void DeutscheTelekom::onSuccess(QNetworkReply* reply)
+void DeutscheTelekom::doStart()
 {
-    qDebug() << reply;
-    qDebug() << reply->error();
-    auto response = HttpResponse(reply);
+    if (m_reply) {
+        m_reply->abort();
+    }
+
+    m_reply = m_nam.get(m_request);
+    connect(
+        m_reply, &QNetworkReply::finished,
+        this, &DeutscheTelekom::onFinished);
+}
+
+void DeutscheTelekom::onFinished()
+{
+    if (m_reply == nullptr) {
+        return;
+    }
+
+    auto now = QDateTime::currentDateTimeUtc();
+    auto response = HttpResponse(m_reply);
+    m_reply = nullptr;
 
     if (response.hasNetworkError()) {
-        qDebug() << reply;
         return sendErrorUpdate(response.errorString());
     }
 
@@ -88,20 +101,19 @@ void DeutscheTelekom::onSuccess(QNetworkReply* reply)
 
     QJsonObject jsonObj = json.object();
     DataUsage lastState;
-    lastState.lastUpdate = jsonObj.value(QStringLiteral("usedAt")).toVariant().toLongLong();
-    lastState.nextUpdate = m_lastState.lastUpdate + jsonObj.value(QStringLiteral("nextUpdate")).toInt();
+    lastState.lastUpdate = QDateTime::fromMSecsSinceEpoch(jsonObj.value(QStringLiteral("usedAt")).toVariant().toLongLong());
     lastState.passName = jsonObj.value(QStringLiteral("passName")).toString();
     lastState.passStage = jsonObj.value(QStringLiteral("passStage")).toString();
     lastState.dataVolume = jsonObj.value(QStringLiteral("initialVolume")).toVariant().toLongLong();
     lastState.usedDataVolume = jsonObj.value(QStringLiteral("usedVolume")).toVariant().toLongLong();
-    lastState.remainingTime = jsonObj.value(QStringLiteral("remainingSeconds")).toInt();
+    lastState.until = now.addSecs(jsonObj.value(QStringLiteral("remainingSeconds")).toInt());
     sendUpdate(std::move(lastState));
-    qDebug() << __PRETTY_FUNCTION__ << __LINE__;
 }
 
 void DeutscheTelekom::sendUpdate(DataUsage dataUsage)
 {
     m_lastState = dataUsage;
+    m_timer.start(600000);
     m_lastState.valid = true;
     emit update();
 }
@@ -110,6 +122,7 @@ void DeutscheTelekom::sendErrorUpdate(const QString& message)
 {
     DataUsage lastState;
     lastState.error = message;
+    m_timer.start(60000);
     qDebug() << "got error" << message;
     sendUpdate(std::move(lastState));
 }

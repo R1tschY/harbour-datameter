@@ -7,8 +7,6 @@ class QNetworkReply;
 
 namespace DataMeter {
 
-class CyclicHttpRequest;
-
 /**
  * @brief Fake provider
  */
@@ -29,7 +27,6 @@ public:
     void refresh() override;
 
 private:
-    CyclicHttpRequest* m_request;
     DataUsage m_lastState;
 };
 

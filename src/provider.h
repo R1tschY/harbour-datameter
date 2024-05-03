@@ -16,13 +16,14 @@ class Provider : public QObject {
     Q_PROPERTY(QString description READ description NOTIFY modelChanged)
     Q_PROPERTY(ProviderModel* model READ model WRITE setModel NOTIFY modelChanged)
 
-    Q_PROPERTY(QString passName READ passName NOTIFY update)
-    Q_PROPERTY(bool hasError READ hasError NOTIFY update)
-    Q_PROPERTY(QString errorString READ errorString NOTIFY update)
-    Q_PROPERTY(qreal dataVolume READ dataVolume NOTIFY update)
-    Q_PROPERTY(qreal usedDataVolume READ usedDataVolume NOTIFY update)
-    Q_PROPERTY(QDateTime lastUpdate READ lastUpdate NOTIFY update)
-    Q_PROPERTY(QDateTime nextUpdate READ nextUpdate NOTIFY update)
+    Q_PROPERTY(QString passName READ passName NOTIFY dataChanged)
+    Q_PROPERTY(bool hasError READ hasError NOTIFY dataChanged)
+    Q_PROPERTY(QString errorString READ errorString NOTIFY dataChanged)
+    Q_PROPERTY(qreal dataVolume READ dataVolume NOTIFY dataChanged)
+    Q_PROPERTY(qreal usedDataVolume READ usedDataVolume NOTIFY dataChanged)
+    Q_PROPERTY(QDateTime lastUpdate READ lastUpdate NOTIFY dataChanged)
+    Q_PROPERTY(QDateTime nextUpdate READ nextUpdate NOTIFY dataChanged)
+    Q_PROPERTY(QDateTime until READ until NOTIFY dataChanged)
 
 public:
     QString name();
@@ -40,11 +41,12 @@ public:
 
     QDateTime lastUpdate() const;
     QDateTime nextUpdate() const;
+    QDateTime until() const;
 
     Q_INVOKABLE void refresh();
 
 signals:
-    void update();
+    void dataChanged();
     void modelChanged();
 
 private:
@@ -57,15 +59,15 @@ struct DataUsage {
     bool valid = false;
     QString error;
 
-    qlonglong lastUpdate;
-    qlonglong nextUpdate;
+    QDateTime lastUpdate;
+    QDateTime nextUpdate;
+    QDateTime until;
 
     QString passName;
     QString passStage;
 
-    qlonglong remainingTime;
-    qlonglong dataVolume;
-    qlonglong usedDataVolume;
+    qlonglong dataVolume = 0;
+    qlonglong usedDataVolume = 0;
 };
 
 class ProviderModel : public QObject {

@@ -7,7 +7,7 @@ CoverBackground {
 
         width: parent.width
         height: parent.height - Theme.itemSizeSmall
-        visible: networkListener.hasMobileData
+        visible: networkListener.hasMobileData && provider.dataVolume > 0
 
         ProgressCircle {
             id: progress
@@ -40,13 +40,13 @@ CoverBackground {
 
             Label {
                 anchors.horizontalCenter: parent.horizontalCenter
-                text: humanizeFileSize(provider.usedDataVolume)
+                text: humanizeFileSize(provider.dataVolume - provider.usedDataVolume)
                 color: Theme.primaryColor
                 font.pixelSize: Theme.fontSizeLarge
             }
             Label {
                 anchors.horizontalCenter: parent.horizontalCenter
-                text: qsTr("of %1").arg(humanizeFileSize(provider.dataVolume))
+                text: humanizeUntilDate(provider.until)
                 color: Theme.primaryColor
                 font.pixelSize: Theme.fontSizeExtraSmall
             }
@@ -76,7 +76,7 @@ CoverBackground {
 
             Connections {
                 target: provider
-                onUpdate: {
+                onDataChanged: {
                     lastUpdateLabel.text = humanizeTimeDiff(provider.lastUpdate)
                 }
             }
