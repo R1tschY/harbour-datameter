@@ -21,15 +21,18 @@ Sailfish OS application to retrieve mobile data usage from your mobile network p
 %prep
 %setup -q -n %{name}-%{version}
 
-
 %build
-%qmake5 
-make %{?_smp_mflags}
-
+cmake \
+  -DCPM_SOURCE_CACHE=$PWD/.cpm-cache \
+  -DCMAKE_INSTALL_PREFIX=/usr \
+  -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
+  -DPACKAGE_VERSION="%{version}" \
+  -DPACKAGE_RELEASE="%{release}" \
+  -DTANKERKOENIG_APIKEY=$TANKERKOENIG_APIKEY
+cmake --build . -- %{?_smp_mflags}
 
 %install
-rm -rf %{buildroot}
-%qmake5_install
+DESTDIR=%{buildroot} cmake --build . --target install
 
 desktop-file-install --delete-original       \
   --dir %{buildroot}%{_datadir}/applications             \
