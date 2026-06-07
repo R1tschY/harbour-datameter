@@ -1,7 +1,7 @@
 Name:       harbour-datameter
 Summary:    Check mobile data usage
-Version:    0.1.0
-Release:    1
+Version:    0.2.0
+Release:    0
 Group:      Qt/Qt
 License:    GPLv3
 URL:        https://github.com/R1tschY/harbour-datameter
