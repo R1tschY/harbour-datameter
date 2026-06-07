@@ -22,7 +22,7 @@ jobs:
       SFOS_ARCH: ${{ matrix.arch }}
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Build ${{ matrix.arch }} RPM
         uses: R1tschY/sailfish-build-rpm@v1
@@ -32,7 +32,7 @@ jobs:
           fix-version: false
 
       - name: Upload build result
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: harbour-refuel-${{ matrix.arch }}
           path: RPMS
@@ -59,7 +59,7 @@ jobs:
         shell: bash
 
       - name: Download RPMs
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           path: RPMS
           pattern: harbour-refuel-*
